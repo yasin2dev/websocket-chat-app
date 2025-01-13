@@ -124,6 +124,7 @@ export default function Home({ username }) {
               className='mx-2 text-lg  focus:outline-none w-full'
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
+              autoComplete='off'
             />
             <button
               id="sendBtn"
