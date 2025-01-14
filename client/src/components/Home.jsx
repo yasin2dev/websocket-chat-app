@@ -70,7 +70,7 @@ export default function Home({ username }) {
     <div>
       {duplicated ? (<div></div>) : (
         <>
-          <p className='text-left pl-2 pt-2'>logged as {username} <a href="/">logout</a></p>
+          <p className='text-left pl-2'>logged as {username} <a href="/">logout</a></p>
         </>
       )}
       <div className='flex space-x-4'>

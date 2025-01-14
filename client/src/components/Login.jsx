@@ -7,14 +7,15 @@ export default function Login({ onSubmit }) {
 
 
     return (
-        <>
-            <h1>Welcome to  <code>realtime chat app</code></h1>
-            <h3>Please enter your username</h3>
+        <div className='mt-32'>
+            <h1 className='text-2xl'>Welcome to  <code>realtime chat app</code></h1>
+            <h3 className='font-bold mb-2 mt-4'>Please enter your username</h3>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
                     onSubmit(username)
                 }}
+                className='my-8'
             >
                 <input
                     type="text"
@@ -27,6 +28,6 @@ export default function Login({ onSubmit }) {
                 <br />
                 <button type='submit' style={{ width: '71%', marginTop: "12px" }}>Join</button>
             </form>
-        </>
+        </div>
     )
 }
