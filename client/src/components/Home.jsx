@@ -98,7 +98,6 @@ export default function Home({ username }) {
                       <p className='text-sm font-bold pl-1 float-right bg-blue-400 max-w-fit mx-1 px-1 rounded py-0 text-black'><code>{JSON.parse(msg).time}</code></p>
                     </>
                   )}
-                  {console.log(JSON.parse(msg))}
                 </div>
               ))}
               {/* referans kullanılarak takip edilecek div: */}

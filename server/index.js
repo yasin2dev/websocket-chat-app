@@ -160,7 +160,6 @@ socketServer.on("connection", (connection, request) => {
                 bUser.map((uuid) => {
                     connection.send(JSON.stringify({ event: 'message-server', mesg: uuid.msg, author: uuid.author, time: uuid.time, disconnectedUser: '' }));
                 })
-                console.log(bUser)
             })
 
         //Handle events.
