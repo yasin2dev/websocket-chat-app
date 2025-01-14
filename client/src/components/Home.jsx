@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import useWebSocket from 'react-use-websocket';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import throttle from 'lodash.throttle';
 import '../styles/Home.css'
 
@@ -8,6 +8,7 @@ export default function Home({ username }) {
   const [messages, setMessages] = useState([]);
   const [duplicated, setDuplicated] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
+  const [csrfToken, setCsrfToken] = useState("");
 
   const scrl = useRef(null);
   const WS_URL = 'ws://localhost:3001';
@@ -16,10 +17,7 @@ export default function Home({ username }) {
     scrl.current.scrollIntoView({ behavior: "smooth" });
   }, [messages]) // messages arrayine giriş çıkış olduğunda display edilen veriyi takip et. scrollIntoView.
 
-  useEffect(() => {
-    window.onbeforeunload = () => {return '';}
-  }, []) // Herhangi bir şey tetiklemez.
-
+  
   const { sendMessage } = useWebSocket(WS_URL, {
     queryParams: { username },
     onMessage: (event) => {
@@ -30,14 +28,26 @@ export default function Home({ username }) {
         setDuplicated(JSON.parse(event.data).isDuplicated);
       } else if (JSON.parse(event.data).event === 'users') {
         setActiveUsers(JSON.parse(event.data).users)
+      } else if (JSON.parse(event.data).event === 'auth') {
+        setCsrfToken(JSON.parse(event.data).csrfToken)
       }
     }
   });
 
+  useEffect(() => {
+    window.onbeforeunload = () => {return '';}
+  }, []) // Herhangi bir şey tetiklemez.
+  
+  useEffect(() => {
+    if (ReadyState.OPEN) {
+      sendMessage(JSON.stringify({type: 'authToken', csrfToken: csrfToken}));
+    }
+  }, [])
 
+  
   const THROTTLE = 500; // server'a en hızlı 500 ms aralıklarla mesaj gönderebiliriz.
   const sendMessageThrottled = useRef(throttle((msg) => { // useRef optimizasyon sağlar ve throttle'ın tekrar create edilerek ms sınırının bozulmasını engeller.
-    sendMessage(msg);
+    sendMessage(JSON.stringify({type: 'chat-message', msg: msg}));
   }, THROTTLE));
 
   const handleSendMessage = () => {
@@ -53,6 +63,8 @@ export default function Home({ username }) {
       handleSendMessage();
     }
   };
+
+
 
   return (
     <div>
