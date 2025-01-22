@@ -41,6 +41,10 @@ const insertChatData = (user, msg, time, uuid) => {
     })
 }
 
+/* Create time and date for every block and return final timeAndDate format.*/
+/*** 
+ * example usage: createTimeAndDate() -> when called function will return time and date in this format: '01/01/2025, 12:00'
+ * ***/
 var now, date, hours, minutes, time, timeAndDate;
 const createTimeAndDate = () => {
     now = new Date();
@@ -103,11 +107,9 @@ socketServer.on("connection", (connection, request) => {
     
     if (path === validSocketUrl) {
         const csrfToken = uuidv4();
-        
-        let values = Object.values(users);
+
         let isDuplicate = false;
-        
-        values.forEach((item) => {       
+        Object.values(users).forEach((item) => {       
             if (item.username.toLowerCase() === username.toLowerCase()) {
                 isDuplicate = true;
                 watcher.add(item)
@@ -154,7 +156,7 @@ socketServer.on("connection", (connection, request) => {
             }
         })
     } else {
-        socketServer.close(1011, "Unvalid socket URL");
+        socketServer.close(1011, "Invalid socket URL");
     }
 })
 
