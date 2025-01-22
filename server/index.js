@@ -76,25 +76,22 @@ const handleMessage = (bytes, uuid) => {
 
 
 const broadcastMessages = (uInfo, bytes) => {
-    Object.keys(connections).forEach((uuid) => {
-        const connection = connections[uuid];
+    Object.values(connections).forEach((uuid) => {
         const message = JSON.parse(bytes)
-        connection.send(JSON.stringify({ event: "message-server", mesg: message.msg, author: uInfo.username, time: timeAndDate, disconnectedUser: '', }));
+        uuid.send(JSON.stringify({ event: "message-server", mesg: message.msg, author: uInfo.username, time: timeAndDate, disconnectedUser: '', }));
     });
 };
 
 const broadcastDisconnections = (uInfo) => {
-    Object.keys(connections).map((uuid) => {
-        const connection = connections[uuid];
-        connection.send(JSON.stringify({ event: "message-server", mesg: '', author: 'SERVER', disconnectedUser: uInfo?.username }));
-        connection.send(JSON.stringify({ event: "users", users: users }))
+    Object.values(connections).map((uuid) => {
+        uuid.send(JSON.stringify({ event: "message-server", mesg: '', author: 'SERVER', disconnectedUser: uInfo?.username }));
+        uuid.send(JSON.stringify({ event: "users", users: users }))
     })
 }
 
 const broadcastUsers = () => {
-    Object.keys(connections).map((uuid) => {
-        const connection = connections[uuid];
-        connection.send(JSON.stringify({ event: "users", users: users }))
+    Object.values(connections).map((uuid) => {
+        uuid.send(JSON.stringify({ event: "users", users: users }))
     })
 }
 
