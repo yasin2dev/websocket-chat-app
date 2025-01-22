@@ -126,23 +126,6 @@ const broadcastUsers = () => {
 }
 
 const csrfToken = uuidv4();
-const validateToken = (msg) => {
-    try {
-        const parsedMessage = JSON.parse(msg);
-        if (parsedMessage.type === 'authToken') {
-            last = csrfToken;
-            if (last = csrfToken) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    } catch (error) {
-        console.error(error)
-    }
-    return false;
-}
-
 
 // ON new Connection at websocket
 socketServer.on("connection", (connection, request) => {
