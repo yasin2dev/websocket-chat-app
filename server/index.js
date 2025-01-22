@@ -66,9 +66,10 @@ const handleMessage = (bytes, uuid) => {
         if (!user) {
             console.error(`User not found for UUID: ${uuid}`);
             return;
+        } else {
+            insertChatData(user.username, message, createTimeAndDate(), user.UUID)
+            broadcastMessages(user, bytes);
         }
-        insertChatData(user.username, message, createTimeAndDate(), user.UUID)
-        broadcastMessages(user, bytes);
     }
 };
 
@@ -97,58 +98,67 @@ const broadcastUsers = () => {
     })
 }
 
-const csrfToken = uuidv4();
 
-socketServer.on("connection", (connection, request) => {    
-    const { username } = url.parse(request.url, true).query;   
-
-    let values = Object.values(users);
-    let isDuplicate = false;
-
-    values.forEach((item) => {       
-        if (item.username.toLowerCase() === username.toLowerCase()) {
-            isDuplicate = true;
-            watcher.add(item)
-            connection.send(JSON.stringify({ event: 'duplicated', isDuplicated: isDuplicate }))
-            watcher.delete(item)
-        }
-    });
-
+socketServer.on("connection", (connection, request) => {
+    const { username } = url.parse(request.url, true).query;
+    const path = url.parse(request.url, true).pathname;
+    const validSocketUrl = "/";
     
-    let last = null;
-    connection.once("message", (msg) => {
-        const parsedMessage = JSON.parse(msg.toString())
-        if (parsedMessage.type === 'authToken') {
-            last = csrfToken;
-        }
-        if (isDuplicate === false && csrfToken === last) {
-            const uuid = uuidv4()
-            if (username) {
-                connections[uuid] = connection;
-                users[uuid] = {
-                    UUID: uuid,
-                    username: username,
-                    status: "online",
-                };
+    if (path === validSocketUrl) {
+        const csrfToken = uuidv4();
+        
+        let values = Object.values(users);
+        let isDuplicate = false;
+        
+        values.forEach((item) => {       
+            if (item.username.toLowerCase() === username.toLowerCase()) {
+                isDuplicate = true;
+                watcher.add(item)
+                connection.send(JSON.stringify({ event: 'duplicated', isDuplicated: isDuplicate }))
+                watcher.delete(item)
+            } else {
+                
             }
-            broadcastUsers();
-            selectAllData('chats')
-            .then((data) => {
-                bUser = [...data];
-                bUser.map((uuid) => {
-                    connection.send(JSON.stringify({ event: 'message-server', mesg: uuid.msg, author: uuid.author, time: uuid.time, disconnectedUser: '' }));
+        });
+        
+        
+        let last = null;
+        connection.once("message", (msg) => {
+            const parsedMessage = JSON.parse(msg.toString())
+            if (parsedMessage.type === 'authToken') {
+                last = csrfToken;
+            }
+    
+            if (isDuplicate === false && csrfToken === last) {
+                const uuid = uuidv4()
+                if (username) {
+                    connections[uuid] = connection;
+                    users[uuid] = {
+                        UUID: uuid,
+                        username: username,
+                        status: "online",
+                    };
+                }
+                broadcastUsers();
+                selectAllData('chats')
+                .then((data) => {
+                    bUser = [...data];
+                    bUser.map((uuid) => {
+                        connection.send(JSON.stringify({ event: 'message-server', mesg: uuid.msg, author: uuid.author, time: uuid.time, disconnectedUser: '' }));
+                    })
                 })
-            })
-
-            connection.on("message", (message) => handleMessage(message, uuid))
-            connection.on("close", () => handleClose(uuid))
-            connection.send(JSON.stringify({ event: 'duplicated', isDuplicated: isDuplicate }))            
-            console.log(`User connected: ${username} - [${createTimeAndDate().toString()}]`)
-            connection.send(JSON.stringify({ event: 'auth', csrfToken: csrfToken }))
     
-        }
-    })
-    
+                connection.on("message", (message) => handleMessage(message, uuid))
+                connection.on("close", () => handleClose(uuid))
+                connection.send(JSON.stringify({ event: 'duplicated', isDuplicated: isDuplicate }))            
+                console.log(`User connected: ${username} - [${createTimeAndDate().toString()}]`)
+                connection.send(JSON.stringify({ event: 'auth', csrfToken: csrfToken }))
+        
+            }
+        })
+    } else {
+        socketServer.close(1011, "Unvalid socket URL");
+    }
 })
 
 
