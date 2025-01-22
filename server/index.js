@@ -18,8 +18,8 @@ const db = knex({
     },
 })
 
-const selectAllData = (table, column) => {
-    return db.select(column)
+const selectAllData = (table) => {
+    return db.select("*")
         .from(table)
         .then((data) => {
             return data
