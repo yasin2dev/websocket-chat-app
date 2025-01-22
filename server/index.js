@@ -58,13 +58,6 @@ var bUser = [];
 const watcher = new Set();
 
 const handleMessage = (bytes, uuid) => {    
-    now = new Date();
-    hours = now.getHours();
-    minutes = now.getMinutes();
-    time = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
-    date = ('0' + now.getDate()).slice(-2) + '/' + ('0' + (now.getMonth() + 1)).slice(-2) + '/' + now.getFullYear();
-    timeAndDate = `${date}, ${time}`
-    
     const parsedMessage = JSON.parse(bytes)
     if (parsedMessage.type === 'chat-message') {
         const message = parsedMessage.msg;
@@ -73,7 +66,7 @@ const handleMessage = (bytes, uuid) => {
             console.error(`User not found for UUID: ${uuid}`);
             return;
         }
-        insertChatData(user.username, message, timeAndDate, user.UUID)
+        insertChatData(user.username, message, createTimeAndDate(), user.UUID)
         broadcastMessages(user, bytes);
     }
 };
