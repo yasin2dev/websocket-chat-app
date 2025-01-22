@@ -24,12 +24,12 @@ export default function Home({ username }) {
       const data = JSON.parse(event.data);
       if (data.event === "message-server") {
         setMessages((prevMessages) => [...prevMessages, `${event.data}`])
-      } else if (JSON.parse(event.data).event === 'duplicated') {
-        setDuplicated(JSON.parse(event.data).isDuplicated);
-      } else if (JSON.parse(event.data).event === 'users') {
-        setActiveUsers(JSON.parse(event.data).users)
-      } else if (JSON.parse(event.data).event === 'auth') {
-        setCsrfToken(JSON.parse(event.data).csrfToken)
+      } else if (data.event === 'duplicated') {
+        setDuplicated(data.isDuplicated);
+      } else if (data.event === 'users') {
+        setActiveUsers(data.users)
+      } else if (data.event === 'auth') {
+        setCsrfToken(data.csrfToken)
       }
     }
   });
