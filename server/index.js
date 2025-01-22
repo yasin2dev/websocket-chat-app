@@ -3,18 +3,19 @@ const { WebSocketServer } = require("ws");
 const url = require("url");
 const uuidv4 = require("uuid").v4;
 const knex = require("knex");
+require("dotenv").config();
 
 const server = http.createServer();
 const socketServer = new WebSocketServer({ server });
 const port = 3001;
 
 const db = knex({
-    client: "pg",
+    client: process.env.DB_CLIENT,
     connection: {
-        host: "localhost",
-        user: "postgres",
-        password: "root",
-        database: "websocket"
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB
     },
 })
 
