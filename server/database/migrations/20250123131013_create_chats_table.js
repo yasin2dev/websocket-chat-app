@@ -6,7 +6,7 @@ exports.up = function(knex) {
     return knex.schema.createTable('chats', (table) => {
         table.increments();
         table.string('author').notNullable();
-        table.string('msg').notNullable();
+        table.text('msg').notNullable();
         table.uuid('userUuid').notNullable();
         table.string('time').notNullable();
     })
