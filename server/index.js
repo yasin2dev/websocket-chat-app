@@ -2,22 +2,12 @@ const http = require("http");
 const { WebSocketServer } = require("ws");
 const url = require("url");
 const uuidv4 = require("uuid").v4;
-const knex = require("knex");
+const db = require("./database/knex");
 require("dotenv").config();
 
 const server = http.createServer();
 const socketServer = new WebSocketServer({ server });
 const port = 3001;
-
-const db = knex({
-    client: process.env.DB_CLIENT,
-    connection: {
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB
-    },
-})
 
 const selectAllData = (table) => {
     return db.select("*")
@@ -30,6 +20,8 @@ const selectAllData = (table) => {
 }
 
 
+// WARN: For these operations to work properly, the command 'knex migrate:latest' must be executed.
+/* This function inserting message data to the 'chats' table, PostgreSQL database. */
 const insertChatData = (user, msg, time, uuid) => {
     return db('chats').insert({
         author: user,
