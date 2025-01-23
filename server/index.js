@@ -27,7 +27,7 @@ const insertChatData = (user, msg, time, uuid) => {
         author: user,
         msg: msg,
         time: time,
-        id: uuid
+        userUuid: uuid
     }).catch((error) => {
         console.error('Error on inserting chat data to the DB: ' + error)
     })
