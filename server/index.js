@@ -108,8 +108,6 @@ socketServer.on("connection", (connection, request) => {
                 watcher.add(item)
                 connection.send(JSON.stringify({ event: 'duplicated', isDuplicated: isDuplicate }))
                 watcher.delete(item)
-            } else {
-                
             }
         });
         

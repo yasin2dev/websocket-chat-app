@@ -25,7 +25,7 @@ Basic web based chat application, Built with Websocket, PostgreSQL, React.js and
     C:\websocket-chat-app> cd client
     C:\websocket-chat-app\client> npm i
 ```
-- To complete the database configuration, you can edit the <code>[.env](https://github.com/yasin2dev/websocket-chat-app/blob/master/server/.env)</code> file under the server directory.
+- To complete the database configuration, you can edit the <code>[.env](https://github.com/yasin2dev/websocket-chat-app/blob/master/.env)</code> file.
 
 ## Run Project
 - For running the server:
