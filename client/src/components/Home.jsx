@@ -11,7 +11,7 @@ export default function Home({ username }) {
   const [csrfToken, setCsrfToken] = useState("");
 
   const scrl = useRef(null);
-  const WS_URL = 'ws://localhost:3001';
+  const WS_URL = import.meta.env.VITE_WS_URL;
 
   useEffect(() => {
     scrl.current.scrollIntoView({ behavior: "smooth" });
