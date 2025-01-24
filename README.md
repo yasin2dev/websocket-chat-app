@@ -2,6 +2,12 @@
   <h2 align="center">Web Based Chat App Project</h2>
 </p>
 
+<div align="center">
+    <img src="./res/badges/node.svg"/>
+    <img src="./res/badges/react.svg"/>
+    <img src="./res/badges/knex.svg"/>
+</div>
+
 Basic web based chat application, Built with Websocket, PostgreSQL, React.js and Knex.js
 
 <ins>Important note:</ins> This project not for professional use. It's for the improve myself.
@@ -32,3 +38,11 @@ Basic web based chat application, Built with Websocket, PostgreSQL, React.js and
     C:\websocket-chat-app> cd client
     C:\websocket-chat-app\client> npm run dev
 ```
+
+## Default Settings
+
+### Ports:
+
+- Database: 5432
+- Front-end: 5173
+- Websocket Server: 3001
