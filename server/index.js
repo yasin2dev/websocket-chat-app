@@ -3,11 +3,12 @@ const { WebSocketServer } = require("ws");
 const url = require("url");
 const uuidv4 = require("uuid").v4;
 const db = require("./database/knex");
-require("dotenv").config();
+const path = require('path');
+require("dotenv").config({path: path.resolve(__dirname, '../.env')});
 
 const server = http.createServer();
 const socketServer = new WebSocketServer({ server });
-const port = 3001;
+const port = process.env.WS_PORT;
 
 const selectAllData = (table) => {
     return db.select("*")
