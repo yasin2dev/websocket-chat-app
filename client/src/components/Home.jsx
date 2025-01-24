@@ -129,6 +129,7 @@ export default function Home({ username }) {
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
               autoComplete='off'
+              spellCheck='false'
             />
             <button
               id="sendBtn"
